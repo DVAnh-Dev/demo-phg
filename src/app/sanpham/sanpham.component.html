@@ -63,7 +63,7 @@
           <div class="row g-3">
             <div class="col-md-8">
               <div class="d-flex align-items-center">
-                <label class="fw-bold text-nowrap me-2">Kính gửi Ông/Bà:</label>
+                <label class="fw-bold text-nowrap me-2" style="font-size: 15px;">Kính gửi Ông/Bà:</label>
                 <input
                   type="text"
                   class="form-control input-kieu-giay"
@@ -75,7 +75,7 @@
 
             <div class="col-md-4">
               <div class="d-flex align-items-center">
-                <label class="fw-bold text-nowrap me-2">SĐT:</label>
+                <label class="fw-bold text-nowrap me-2" style="font-size: 15px;">SĐT:</label>
                 <input
                   type="text"
                   class="form-control input-kieu-giay"
@@ -87,7 +87,7 @@
 
             <div class="col-md-12">
               <div class="d-flex align-items-center">
-                <label class="fw-bold text-nowrap me-2">Địa chỉ :</label>
+                <label class="fw-bold text-nowrap me-2" style="font-size: 15px;">Địa chỉ :</label>
                 <input
                   type="text"
                   class="form-control input-kieu-giay"
@@ -428,7 +428,7 @@
   </div>
 </div>
 <!-- Tổng cộng -->
-<div class="footer-block">
+<div class="">
   <div
     class="row justify-content-start"
     style="padding-top: 45px;"
@@ -573,14 +573,14 @@
         </div>
       </div>
 
-      <div class="row mt-2" style="page-break-inside: avoid">
+      <div class="row mt-2 footer-2" style="page-break-inside: avoid">
         <div class="col-6 text-center">
-          <h5 class="fw-bold text-uppercase mb-5">Đại diện khách hàng</h5>
+          <h6 class="fw-bold text-uppercase mb-5">Đại diện khách hàng</h6>
 
           <div style="height: 100px"></div>
 
           <div class="border-top w-50 mx-auto border-secondary pt-2">
-            <small class="text-muted">(Ký và ghi rõ họ tên)</small>
+            <p class="text-muted">(Ký và ghi rõ họ tên)</p>
           </div>
         </div>
 
@@ -590,10 +590,10 @@
             {{ ngayHienTai | date : "MM" }} năm
             {{ ngayHienTai | date : "yyyy" }}
           </p>
-          <h5 class="fw-bold text-uppercase text-success mb-1">
+          <h6 class="fw-bold text-uppercase text-success mb-1">
             CÔNG TY TNHH TTNT PHAN HOÀNG GIA
-          </h5>
-          <small class="d-block mb-4">(Đại diện công ty)</small>
+          </h6>
+          <p class="d-block mb-4">(Đại diện công ty)</p>
 
           <div
             class="d-flex justify-content-center align-items-end"

@@ -179,20 +179,47 @@ export class SanphamComponent implements OnInit {
   }
 
   addSanPhamCoSan(data: ISanPham): void {
-    this.isAddNew = true;
-    const sanPhamMoi: ISanPham = { ...data, soluong: this.soluongThemmoi ,thanhtien: (data.dongia || 1) * this.soluongThemmoi};
-    this.sanphamService.addSanPham(sanPhamMoi).subscribe(() => {
-      this.getData();
-      this.isAddNew = false;
-      this.isUpdate = false;
-    });
+    
+    const sanPhamMoi: ISanPham = {
+      ...data,
+      soluong: this.soluongThemmoi,
+      thanhtien: (data.dongia || 1) * this.soluongThemmoi,
+    };
+
+    const checkSpTrung: ISanPham | undefined = this.danhSachSanPham.find(
+      (sp) => sp.hangmuc === sanPhamMoi.hangmuc && sp.size === sanPhamMoi.size
+    );
+    if (checkSpTrung) {
+      const updateSanPhamTrung: ISanPham = {
+        ...checkSpTrung,
+        soluong: (checkSpTrung.soluong || 0) + this.soluongThemmoi,
+        dongia: checkSpTrung.dongia,
+        thanhtien:
+          ((checkSpTrung.soluong || 0) + this.soluongThemmoi) *
+          (checkSpTrung.dongia || 0),
+      };
+      this.sanphamService
+        .updateSanPham(updateSanPhamTrung.id, updateSanPhamTrung)
+        .subscribe(() => {
+          this.getData();
+          this.isAddNew = false;
+          this.isUpdate = false;
+          this.soluongThemmoi = 1;
+        });
+    } else {
+      this.sanphamService.addSanPham(sanPhamMoi).subscribe(() => {
+        this.getData();
+        this.isAddNew = false;
+        this.isUpdate = false;
+        this.soluongThemmoi = 1;
+      });
+    }
   }
 
   onChangeSoluong(event: any): void {
     const value = event.target.value;
     this.sanPham.soluong = Number(value);
     this.soluongThemmoi = Number(value);
-
   }
 
   deleteSanPham(id: string): void {
@@ -433,7 +460,7 @@ export class SanphamComponent implements OnInit {
           pdf.save('Hop-dong-bao-gia.pdf');
           this.removePageBreaks();
         });
-      }, 100);
+      }, 250);
     }
   }
 }
