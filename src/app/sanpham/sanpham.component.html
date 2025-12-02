@@ -1,0 +1,503 @@
+<div>
+  <div>
+    <div class="thong-tin" style="margin: 35px 0" *ngIf="!isAddNew">
+      <div class="mb-4">
+        <div
+          class="row align-items-center mb-4 border-bottom border-success border-2 pb-3"
+        >
+          <div class="col-md-7">
+            <div class="d-flex align-items-center">
+              <img
+                src="https://tse2.mm.bing.net/th/id/OIP.TQeBjNl79ap1arg_U6tMMQHaHa?rs=1&pid=ImgDetMain&o=7&rm=3"
+                alt="Logo"
+                class="me-3"
+                style="width: 100px; height: auto"
+              />
+              <div>
+                <h4
+                  class="text-success fw-bold text-uppercase m-0"
+                  style="letter-spacing: 1px"
+                >
+                  CÔNG TY TNHH TTNT PHAN HOÀNG GIA
+                </h4>
+                <div class="text-secondary small mt-2">
+                  <p class="mb-1">
+                    <i class="fa-solid fa-location-dot me-2 text-success"></i
+                    >Đường NE8, KCN Mỹ Phước 3, Bến Cát, Bình Dương
+                  </p>
+                  <p class="mb-1">
+                    <i class="fa-solid fa-phone me-2 text-success"></i>0933 426
+                    399
+                  </p>
+                  <p class="mb-0">
+                    <i class="fa-solid fa-globe me-2 text-success"></i
+                    >www.phanhoanggia.com
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-5 text-end">
+            <h1 class="text-uppercase fw-bold text-success display-6 mb-1">
+              Bảng Báo Giá
+            </h1>
+            <p class="fst-italic text-muted">
+              Số: BG-{{ ngayHienTai | date : "MMyy" }}-001 <br />
+              Ngày: {{ ngayHienTai | date : "dd/MM/yyyy" }}
+            </p>
+          </div>
+        </div>
+
+        <div class="card bg-light border-0">
+          <div class="card-body">
+            <h6 class="text-success fw-bold text-uppercase mb-3">
+              <i class="fa-solid fa-user-tie me-2"></i>Thông tin khách hàng
+            </h6>
+
+            <div class="row g-3">
+              <div class="col-md-8">
+                <div class="d-flex align-items-center">
+                  <label class="fw-bold text-nowrap me-2"
+                    >Kính gửi Ông/Bà:</label
+                  >
+                  <input
+                    type="text"
+                    class="form-control input-kieu-giay"
+                    [(ngModel)]="thongTinKhachHang.ten"
+                    placeholder="Nhập tên khách hàng..."
+                  />
+                </div>
+              </div>
+
+              <div class="col-md-4">
+                <div class="d-flex align-items-center">
+                  <label class="fw-bold text-nowrap me-2">SĐT:</label>
+                  <input
+                    type="text"
+                    class="form-control input-kieu-giay"
+                    [(ngModel)]="thongTinKhachHang.sdt"
+                    placeholder="0123456789"
+                  />
+                </div>
+              </div>
+
+              <div class="col-md-12">
+                <div class="d-flex align-items-center">
+                  <label class="fw-bold text-nowrap me-2"
+                    >Địa chỉ :</label
+                  >
+                  <input
+                    type="text"
+                    class="form-control input-kieu-giay"
+                    [(ngModel)]="thongTinKhachHang.diaChi"
+                    placeholder="Nhập địa chỉ..."
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="p-2 mb-2 d-flex flex-row-reverse header-table-custom">
+    <button
+      class="btn btn-primary"
+      (click)="addSanPham()"
+      *ngIf="!isAddNew && !isUpdate"
+      data-html2canvas-ignore="true"
+    >
+      Thêm mới sản phẩm
+    </button>
+  </div>
+  <!-- Bảng báo giá  -->
+  <div
+    class="container mt-3 table-responsive rounded-3 border custom-table"
+    *ngIf="!isAddNew && !isUpdate"
+  >
+    <table class="table table-bordered align-middle table-hover py-2">
+      <thead class="table-dark text-white" style="border-radius: 5px">
+        <tr>
+          <th class="text-center">STT</th>
+          <th class="text-break text-center">Hạng mục</th>
+          <th class="text-break text-center">KÍCH THƯỚC W x D x H (mm)</th>
+          <th class="text-break text-center">Mô tả</th>
+          <th class="text-break text-center">Hình minh họa</th>
+          <th class="text-break text-center">Đơn Giá (VNĐ)</th>
+          <th class="text-break text-center">Số lượng</th>
+          <th class="text-break text-center">Đơn vị</th>
+          <th class="text-break text-center">Thành tiền (VNĐ)</th>
+          <th class="text-break text-center">Ghi chú</th>
+          <th class="text-break text-center" data-html2canvas-ignore="true">
+            Hành động
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of danhSachSanPham; let i = index">
+          <td class="text-center">{{ i + 1 }}</td>
+          <td class="text-break text-center">{{ item.hangmuc }}</td>
+          <td class="text-break text-center">{{ item.size }}</td>
+          <td class="text-break text-center">{{ item.mota }}</td>
+          <td>
+            <img
+              [src]="item.img"
+              alt="Hình minh họa"
+              style="max-width: 150px; max-height: 150px"
+            />
+          </td>
+          <td class="text-break text-center">{{ item.dongia }}đ</td>
+          <td class="text-break text-center">{{ item.soluong }}</td>
+          <td class="text-break text-center">{{ item.donvi }}</td>
+          <td class="text-break text-center">{{ item.thanhtien }}đ</td>
+          <td class="text-break text-center">{{ item.ghichu }}</td>
+          <td
+            class="d-flex justify-content-center"
+            style="gap: 5px"
+            data-html2canvas-ignore="true"
+          >
+            <button
+              class="btn btn-success btn-sm"
+              (click)="update(item.id, item)"
+            >
+              <i class="fa-solid fa-pen-to-square"></i>
+            </button>
+            <button
+              class="btn btn-danger btn-sm"
+              (click)="deleteSanPham(item.id)"
+            >
+              <i class="fa-solid fa-trash-can"></i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <!-- Thêm mới or update sản phẩm -->
+  <div class="container mt-4" *ngIf="isAddNew || isUpdate">
+    <div class="card shadow">
+      <div
+        class="card-header bg-success text-white d-flex justify-content-between"
+      >
+        <h4 class="mb-0">
+          <i class="bi bi-plus-circle me-2"></i>
+          {{ isUpdate ? "Cập Nhật Sản Phẩm" : "Thêm Mới Sản Phẩm" }}
+        </h4>
+        <button
+          type="button"
+          class="btn btn-secondary button-sm"
+          (click)="isAddNew = false; isUpdate = false"
+          style="height: 35px; padding: 0 15px"
+        >
+          Hủy
+        </button>
+      </div>
+
+      <div class="card-body">
+        <form (ngSubmit)="addSanPham()">
+          <div class="mb-3">
+            <label for="hangmuc" class="form-label fw-bold"
+              >Hạng mục sản phẩm</label
+            >
+            <input
+              type="text"
+              class="form-control"
+              id="hangmuc"
+              [(ngModel)]="sanPham.hangmuc"
+              name="hangmuc"
+              placeholder="Nhập tên hạng mục..."
+              required
+            />
+          </div>
+
+          <div class="row mb-3">
+            <div class="col-md-4">
+              <label for="size" class="form-label fw-bold"
+                >Kích thước (W x D x H)</label
+              >
+              <input
+                type="text"
+                class="form-control"
+                id="size"
+                [(ngModel)]="sanPham.size"
+                name="size"
+                placeholder="VD: 1200 x 600 x 750"
+              />
+            </div>
+            <div class="col-md-2">
+              <label for="donvi" class="form-label fw-bold">Đơn vị</label>
+              <select
+                class="form-select"
+                id="donvi"
+                [(ngModel)]="sanPham.donvi"
+                name="donvi"
+              >
+                <option value="md">Md</option>
+                <option value="hệ">Hệ</option>
+                <option value="m2">M²</option>
+                <option value="Cái">Cái</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label for="img" class="form-label fw-bold"
+                >Link Hình ảnh minh họa</label
+              >
+              <input
+                type="text"
+                class="form-control"
+                id="img"
+                [(ngModel)]="sanPham.img"
+                name="img"
+                placeholder="http://..."
+              />
+            </div>
+          </div>
+
+          <div class="row mb-3 bg-light p-3 rounded mx-0 border">
+            <div class="col-md-4">
+              <label for="dongia" class="form-label fw-bold text-success"
+                >Đơn giá (VNĐ)</label
+              >
+              <input
+                type="number"
+                class="form-control"
+                id="dongia"
+                [(ngModel)]="sanPham.dongia"
+                (input)="tinhThanhTien()"
+                name="dongia"
+              />
+            </div>
+            <div class="col-md-4">
+              <label for="soluong" class="form-label fw-bold">Số lượng</label>
+              <input
+                type="number"
+                class="form-control"
+                id="soluong"
+                [(ngModel)]="sanPham.soluong"
+                (input)="tinhThanhTien()"
+                name="soluong"
+                min="1"
+              />
+            </div>
+            <div class="col-md-4">
+              <label for="thanhtien" class="form-label fw-bold text-danger"
+                >Thành tiền (VNĐ)</label
+              >
+              <input
+                type="text"
+                class="form-control bg-white fw-bold text-danger"
+                id="thanhtien"
+                [(ngModel)]="sanPham.thanhtien"
+                name="thanhtien"
+                readonly
+              />
+            </div>
+          </div>
+
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label for="mota" class="form-label fw-bold"
+                >Mô tả chi tiết</label
+              >
+              <textarea
+                class="form-control"
+                id="mota"
+                rows="3"
+                [(ngModel)]="sanPham.mota"
+                name="mota"
+              ></textarea>
+            </div>
+            <div class="col-md-6">
+              <label for="ghichu" class="form-label fw-bold">Ghi chú</label>
+              <textarea
+                class="form-control"
+                id="ghichu"
+                rows="3"
+                [(ngModel)]="sanPham.ghichu"
+                name="ghichu"
+              ></textarea>
+            </div>
+          </div>
+
+          <div class="d-flex justify-content-end gap-2">
+            <button type="reset" class="btn btn-secondary">Nhập lại</button>
+            <button
+              type="submit"
+              class="btn btn-success"
+              (click)="saveSanPham()"
+            >
+              <i class="bi bi-save me-1"></i> Lưu Sản Phẩm
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <!-- Tổng cộng -->
+  <div
+    class="row justify-content-start"
+    style="margin-top: 35px"
+    *ngIf="!isAddNew && !isUpdate"
+  >
+    <div class="col-md-5">
+      <div class="card border-0 shadow-sm">
+        <div
+          class="d-flex justify-content-between align-items-center p-3 bg-success text-white rounded-top"
+        >
+          <h5 class="mb-0 fw-bold text-uppercase">
+            <i class="fa-solid fa-calculator me-2"></i> Tổng cộng (I)
+          </h5>
+          <span class="fs-5 fw-bold"
+            >{{ tongThanhTien | number : "1.0-0" }} VNĐ</span
+          >
+        </div>
+
+        <div
+          class="d-flex justify-content-between align-items-center p-3 border-start border-end border-success bg-light"
+        >
+          <label for="giamGiaInput" class="mb-0 fw-bold text-success">
+            <h6>
+              <i class="fa-solid fa-user-tag me-2"></i>Giảm giá trọn gói (II)
+            </h6>
+          </label>
+          <div class="input-group" style="width: 200px">
+            <input
+              type="number"
+              style="width: 50px"
+              id="giamGiaInput"
+              class="form-control text-end fw-bold text-danger border-success"
+              [(ngModel)]="giamGia"
+              placeholder="50"
+              max="100"
+            />
+            <span class="input-group-text bg-success text-white border-success"
+              >%</span
+            >
+          </div>
+        </div>
+
+        <div
+          class="d-flex justify-content-between align-items-center p-3 bg-success text-white rounded-bottom"
+        >
+          <h5 class="mb-0 fw-bold text-uppercase">
+            <i class="fa-solid fa-money-bill-1-wave me-2"></i>Thành tiền (I -
+            II)
+          </h5>
+          <span class="fs-4 fw-bold text-warning"
+            >{{ tongThanhTien - tongThanhTien * (giamGia / 100) | number : "1.0-0" }} VNĐ</span
+          >
+        </div>
+      </div>
+    </div>
+    <div class="col-md-2"></div>
+    <div class="col-md-5 text-center">
+      <button
+        class="btn btn-danger mt-4"
+        (click)="xuatPDF()"
+        data-html2canvas-ignore="true"
+      >
+        <i class="fa-solid fa-file-export me-2"></i> Xuất hóa đơn PDF
+      </button>
+    </div>
+    <!-- Footer -->
+    <div class="col-md-12">
+      <div class="mb-5"></div>
+
+      <div class="card border-0 bg-light mb-4">
+        <div class="card-body p-4">
+          <h6
+            class="card-title fw-bold text-success text-uppercase border-bottom border-success pb-2 mb-3"
+          >
+            <i class="fa-solid fa-circle-info me-2"></i>Ghi chú & Điều khoản
+          </h6>
+
+          <div class="row text-secondary small">
+            <div class="col-md-6">
+              <ul class="list-unstyled">
+                <li class="mb-2">
+                  <strong>1/ Chất liệu & Phụ kiện:</strong> Tất cả kích thước
+                  đều theo thực tế.
+                </li>
+                <li class="mb-2">
+                  <strong>2/ Bao gồm:</strong> Phí vận chuyển và lắp đặt. <br />
+                  <em class="text-muted"
+                    >(Lưu ý: Tính phí lắp đặt với thiết bị không do công ty cung
+                    cấp)</em
+                  >
+                </li>
+                <li class="mb-2">
+                  <strong>3/ Không bao gồm:</strong> Chi phí điện nước trong
+                  thời gian thi công.
+                </li>
+                <li class="mb-2">
+                  <strong>4/ Thuế VAT:</strong> Giá chưa bao gồm thuế VAT.
+                </li>
+              </ul>
+            </div>
+
+            <div class="col-md-6">
+              <ul class="list-unstyled">
+                <li class="mb-2">
+                  <strong>5/ Thời gian:</strong> Thiết kế và thi công lắp đặt
+                  25-30 ngày làm việc.
+                </li>
+                <li class="mb-2">
+                  <strong>6/ Phương thức thanh toán:</strong>
+                  <ul>
+                    <li>Lần 1: 50% GTHĐ sau khi ký hợp đồng.</li>
+                    <li>Lần 2: 50% GTHĐ sau 5 ngày nghiệm thu.</li>
+                  </ul>
+                </li>
+                <li class="mb-2">
+                  <strong>7/ Thông tin chuyển khoản:</strong><br />
+                  STK: <span class="fw-bold text-dark">0933426399</span> -
+                  Eximbank (CN Bình Dương)
+                </li>
+                <li class="mb-2"><strong>8/ Bảo hành:</strong> 2 năm.</li>
+              </ul>
+            </div>
+
+            <div class="col-12 mt-2 fst-italic text-danger">
+              * Các hạng mục không có trong báo giá được coi là phát sinh và sẽ
+              được thực hiện khi có xác nhận từ khách hàng.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row mt-5" style="page-break-inside: avoid">
+        <div class="col-6 text-center">
+          <h5 class="fw-bold text-uppercase mb-5">Đại diện khách hàng</h5>
+
+          <div style="height: 120px"></div>
+
+          <div class="border-top w-50 mx-auto border-secondary pt-2">
+            <small class="text-muted">(Ký và ghi rõ họ tên)</small>
+          </div>
+        </div>
+
+        <div class="col-6 text-center">
+          <p class="fst-italic mb-2">
+            Bình Dương, ngày {{ ngayHienTai | date : "dd" }} tháng
+            {{ ngayHienTai | date : "MM" }} năm
+            {{ ngayHienTai | date : "yyyy" }}
+          </p>
+          <h5 class="fw-bold text-uppercase text-success mb-1">
+            CÔNG TY TNHH TTNT PHAN HOÀNG GIA
+          </h5>
+          <small class="d-block mb-4">(Đại diện công ty)</small>
+
+          <div
+            class="d-flex justify-content-center align-items-end"
+            style="height: 100px"
+          ></div>
+
+          <div class="fw-bold fs-5 text-uppercase mt-2">
+            Phan Thị Hoàng Diệu
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

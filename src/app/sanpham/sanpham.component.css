@@ -1,0 +1,57 @@
+.custom-table {
+    height: auto;
+    overflow: auto !important;
+}
+.custom-table thead tr{
+    height: 40px;
+}
+.custom-table tbody tr{
+    border-bottom: 1px solid black;
+}
+/* Làm đẹp danh sách trong phần ghi chú */
+.list-unstyled li {
+    line-height: 1.6; /* Tăng khoảng cách dòng cho dễ đọc */
+}
+
+/* Khi in hoặc xuất PDF */
+@media print {
+    .bg-light {
+        /* Đảm bảo nền xám vẫn hiện khi in (một số trình duyệt mặc định bỏ màu nền) */
+        -webkit-print-color-adjust: exact; 
+        print-color-adjust: exact;
+        background-color: #f8f9fa !important; 
+    }
+    
+    /* Tránh việc tiêu đề nằm trang trước, nội dung nằm trang sau */
+    .card {
+        page-break-inside: avoid;
+    }
+}
+
+/* Tạo kiểu Input giống như dòng kẻ trên giấy */
+.input-kieu-giay {
+    border: none;              /* Bỏ viền khung chữ nhật */
+    border-bottom: 1px dashed #198754; /* Chỉ để lại viền dưới nét đứt màu xanh */
+    background-color: transparent; /* Nền trong suốt */
+    border-radius: 0;          /* Bỏ bo góc */
+    padding-left: 5px;
+    font-weight: bold;
+    color: #333;
+}
+
+/* Khi bấm vào nhập liệu */
+.input-kieu-giay:focus {
+    box-shadow: none;          /* Bỏ hiệu ứng bóng xanh mặc định của Bootstrap */
+    border-bottom: 2px solid #198754; /* Đậm lên khi đang nhập */
+    background-color: #fff;
+}
+
+/* Ẩn placeholder khi in để giấy tờ sạch sẽ */
+@media print {
+    .input-kieu-giay::placeholder {
+        color: transparent;
+    }
+    .input-kieu-giay {
+        border-bottom: none; /* Bỏ luôn dòng kẻ khi in nếu muốn nhìn giống văn bản thường */
+    }
+}
