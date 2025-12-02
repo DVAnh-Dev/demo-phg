@@ -46,6 +46,22 @@
     background-color: #fff;
 }
 
+.input-kieu-giay-chuky {
+    border: none;              /* Bỏ viền khung chữ nhật */
+    background-color: transparent; /* Nền trong suốt */
+    border-radius: 0;          /* Bỏ bo góc */
+    padding-left: 5px;
+    font-weight: bold;
+    color: black;
+}
+
+/* Khi bấm vào nhập liệu */
+.input-kieu-giay-chuky:focus {
+    box-shadow: none;          /* Bỏ hiệu ứng bóng xanh mặc định của Bootstrap */
+    border-bottom: 2px solid #198754; /* Đậm lên khi đang nhập */
+    background-color: #fff;
+}
+
 /* Ẩn placeholder khi in để giấy tờ sạch sẽ */
 @media print {
     .input-kieu-giay::placeholder {
@@ -54,4 +70,119 @@
     .input-kieu-giay {
         border-bottom: none; /* Bỏ luôn dòng kẻ khi in nếu muốn nhìn giống văn bản thường */
     }
+    .input-kieu-giay-chuky::placeholder {
+        color: transparent;
+    }
+    .input-kieu-giay-chuky {
+        border-bottom: none; /* Bỏ luôn dòng kẻ khi in nếu muốn nhìn giống văn bản thường */
+    }
+}
+
+/* --- ÁP DỤNG CHO MOBILE & TABLET (Màn hình < 992px) --- */
+@media screen and (max-width: 991px) {
+  
+  /* 1. Ẩn tiêu đề bảng đi */
+  .table-mobile-responsive thead {
+    display: none;
+  }
+
+  /* 2. Biến mỗi hàng (tr) thành một chiếc Thẻ (Card) đẹp mắt */
+  .table-mobile-responsive tr {
+    display: block;
+    margin-bottom: 20px;
+    background-color: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px; /* Bo tròn góc thẻ */
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05); /* Đổ bóng nhẹ tạo độ nổi */
+    overflow: hidden;
+  }
+
+  /* 3. Tạo điểm nhấn cho hàng đầu tiên (STT) làm tiêu đề thẻ */
+  .table-mobile-responsive td:first-child {
+    background-color: #212529; /* Màu đen giống header cũ */
+    color: #fff;
+    text-align: left;
+    padding: 10px 15px;
+    border-bottom: 1px solid #333;
+    display: block; /* Chiếm trọn chiều ngang */
+  }
+  
+  /* Ẩn chữ "STT" đi, chỉ hiện số #1, #2... */
+  .table-mobile-responsive td:first-child::before {
+    display: none;
+  }
+
+  /* 4. Định dạng các dòng thông tin bên trong thẻ */
+  .table-mobile-responsive td {
+    display: flex;
+    justify-content: center; /* Nhãn bên trái, giá trị bên phải */
+    align-items: center;
+    padding: 12px 15px;
+    border-bottom: 1px solid #f1f1f1;
+    font-size: 15px; /* Chữ to dễ đọc hơn */
+  }
+
+  /* Dòng cuối cùng không cần gạch chân */
+  .table-mobile-responsive td:last-child {
+    border-bottom: none;
+  }
+
+  /* 5. HIỆN NHÃN (LABEL) TỪ HTML */
+  .table-mobile-responsive td::before {
+    content: attr(data-label); /* Lấy tên cột tự động */
+    font-weight: 700;
+    color: #666;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    margin-right: 20px;
+  }
+
+  /* --- TÙY CHỈNH RIÊNG CHO CÁC CỘT ĐẶC BIỆT --- */
+
+  /* Cột Hình ảnh: Cho ảnh ra giữa, to rõ */
+  .table-mobile-responsive td[data-label="Hình minh họa"] {
+    display: block;
+    text-align: center;
+    background-color: #fafafa;
+    padding: 15px;
+  }
+  .table-mobile-responsive td[data-label="Hình minh họa"]::before {
+    display: none; /* Ẩn chữ "Hình minh họa" đi cho thoáng */
+  }
+  .table-mobile-responsive td[data-label="Hình minh họa"] img {
+    max-height: 150px !important; /* Cho ảnh to hơn trên mobile */
+    width: auto;
+    border-radius: 8px;
+  }
+
+  /* Cột Thành tiền: Làm nổi bật */
+  .table-mobile-responsive td[data-label="Thành tiền"] {
+    background-color: #fffbe6; /* Màu nền vàng nhạt để chú ý */
+  }
+
+  /* Cột Hành động (Nút bấm): Căn giữa */
+  .table-mobile-responsive td[data-label="Hành động"] {
+    justify-content: center; /* Nút nằm giữa */
+    padding: 15px;
+  }
+  .table-mobile-responsive td[data-label="Hành động"]::before {
+    display: none;
+  }
+}
+
+/* --- KẾT THÚC PHẦN MOBILE & TABLET --- */
+@media screen and (max-width: 567px) {
+  .header-customs {
+    width: 100%;
+  }
+  .header-customs img {
+    width: 85px !important;
+    height: auto;
+  }
+  .header-customs h4 {
+    font-size: 0.85rem;
+  }
+  .header-customs p {
+    font-size: 0.5rem;
+  }
 }

@@ -8,6 +8,7 @@ import { Observable } from 'rxjs';
 export class SanphamService {
   // Đường dẫn API của bạn
   private apiUrl = 'https://692da10fe5f67cd80a4c4f33.mockapi.io/sanpham';
+  private apiUrl2 = 'https://692da10fe5f67cd80a4c4f33.mockapi.io/sanpham-cosan';
 
   // Tiêm HttpClient vào Service
   constructor(private http: HttpClient) {}
@@ -29,6 +30,11 @@ export class SanphamService {
   updateSanPham(id: string, sanpham: ISanPham): Observable<ISanPham> {
     return this.http.put<ISanPham>(`${this.apiUrl}/${id}`, sanpham);
   }
+
+  getDanhSachSanPhamCoSan(): Observable<ISanPham[]> {
+    return this.http.get<ISanPham[]>(this.apiUrl2);
+  }
+
 }
 
 export interface ISanPham {

@@ -1,11 +1,15 @@
 <div>
   <div>
-    <div class="thong-tin" style="margin: 35px 0" *ngIf="!isAddNew && !isUpdate">
-      <div class="mb-4">
+    <div
+      class="thong-tin"
+      style="margin: 35px 0"
+      *ngIf="!isAddNew && !isUpdate"
+    >
+      <div class="mb-4 container">
         <div
           class="row align-items-center mb-4 border-bottom border-success border-2 pb-3"
         >
-          <div class="col-md-7">
+          <div class="col-7 col-md-7 col-sm-12 col-xs-12 header-customs">
             <div class="d-flex align-items-center">
               <img
                 src="https://tse2.mm.bing.net/th/id/OIP.TQeBjNl79ap1arg_U6tMMQHaHa?rs=1&pid=ImgDetMain&o=7&rm=3"
@@ -38,12 +42,21 @@
             </div>
           </div>
 
-          <div class="col-md-5 text-end">
-            <h1 class="text-uppercase fw-bold text-success display-6 mb-1">
+          <div
+            class="col-5 col-md-5 col-sm-12 col-xs-12 text-end header-customs"
+          >
+            <h4 class="text-uppercase fw-bold text-success mb-1">
               Bảng Báo Giá
-            </h1>
+            </h4>
             <p class="fst-italic text-muted">
-              Số: BG-{{ ngayHienTai | date : "MMyy" }}-001 <br />
+              Số Hợp đồng: {{ soHopDong }}
+              <i
+                class="fa-solid fa-arrows-rotate ms-2 text-success"
+                style="cursor: pointer"
+                (click)="generateRandomCode()"
+                data-html2canvas-ignore="true"
+              ></i>
+              <br />
               Ngày: {{ ngayHienTai | date : "dd/MM/yyyy" }}
             </p>
           </div>
@@ -52,7 +65,8 @@
         <div class="card bg-light border-0">
           <div class="card-body">
             <h6 class="text-success fw-bold text-uppercase mb-3">
-              <i class="fa-solid fa-user-tie me-2"></i>Thông tin khách hàng
+              <i class="fa-solid fa-user-tie me-2 text-success"></i>Thông tin
+              khách hàng
             </h6>
 
             <div class="row g-3">
@@ -84,9 +98,7 @@
 
               <div class="col-md-12">
                 <div class="d-flex align-items-center">
-                  <label class="fw-bold text-nowrap me-2"
-                    >Địa chỉ :</label
-                  >
+                  <label class="fw-bold text-nowrap me-2">Địa chỉ :</label>
                   <input
                     type="text"
                     class="form-control input-kieu-giay"
@@ -116,13 +128,15 @@
     class="container mt-3 table-responsive rounded-3 border custom-table"
     *ngIf="!isAddNew && !isUpdate"
   >
-    <table class="table table-bordered align-middle table-hover py-2">
+    <table
+      class="table table-bordered table-mobile-responsive table-hover py-2 table-responsive-card"
+    >
       <thead class="table-dark text-white" style="border-radius: 5px">
         <tr>
-          <th class="text-center">STT</th>
+          <th class="text-center" style="width: 50px">STT</th>
           <th class="text-break text-center">Hạng mục</th>
           <th class="text-break text-center">KÍCH THƯỚC W x D x H (mm)</th>
-          <th class="text-break text-center">Mô tả</th>
+          <th class="text-break text-center" style="width: 160px">Mô tả</th>
           <th class="text-break text-center">Hình minh họa</th>
           <th class="text-break text-center">Đơn Giá (VNĐ)</th>
           <th class="text-break text-center">Số lượng</th>
@@ -139,7 +153,7 @@
           <td class="text-center">{{ i + 1 }}</td>
           <td class="text-break text-center">{{ item.hangmuc }}</td>
           <td class="text-break text-center">{{ item.size }}</td>
-          <td class="text-break text-center">{{ item.mota }}</td>
+          <td class="text-break">{{ item.mota }}</td>
           <td>
             <img
               [src]="item.img"
@@ -147,10 +161,14 @@
               style="max-width: 150px; max-height: 150px"
             />
           </td>
-          <td class="text-break text-center">{{ item.dongia }}đ</td>
+          <td class="text-break text-center">
+            {{ item.dongia | number : "1.0-0" }}đ
+          </td>
           <td class="text-break text-center">{{ item.soluong }}</td>
           <td class="text-break text-center">{{ item.donvi }}</td>
-          <td class="text-break text-center">{{ item.thanhtien }}đ</td>
+          <td class="text-break text-center">
+            {{ item.thanhtien | number : "1.0-0" }}đ
+          </td>
           <td class="text-break text-center">{{ item.ghichu }}</td>
           <td
             class="d-flex justify-content-center"
@@ -244,13 +262,21 @@
                 >Link Hình ảnh minh họa</label
               >
               <input
-                type="text"
+                type="file"
                 class="form-control"
                 id="img"
                 [(ngModel)]="sanPham.img"
                 name="img"
-                placeholder="http://..."
+                (change)="onFileSelected($event, sanPham)"
+                accept="image/*"
               />
+              <div *ngIf="sanPham.img" class="mt-2">
+                <img
+                  [src]="sanPham.img"
+                  alt="Xem trước"
+                  style="height: 75px; border: 1px solid #ddd"
+                />
+              </div>
             </div>
           </div>
 
@@ -333,6 +359,87 @@
         </form>
       </div>
     </div>
+    <div class="card shadow mt-4" *ngIf="!isUpdate">
+      <div
+        class="card-header bg-success text-white d-flex justify-content-between"
+      >
+        <h4 class="mb-0">
+          <i class="fa-solid fa-list"></i>
+          Danh Sách Sản Phẩm Có Sẵn
+        </h4>
+      </div>
+      <div class="card-body">
+        <div
+          class="container mt-3 table-responsive rounded-3 border custom-table"
+          *ngIf="!isUpdate"
+        >
+          <table
+            class="table table-bordered table-mobile-responsive table-hover py-2 table-responsive-card"
+          >
+            <thead class="table-dark text-white" style="border-radius: 5px">
+              <tr>
+                <th class="text-center" style="width: 50px">STT</th>
+                <th class="text-break text-center">Hạng mục</th>
+                <th class="text-break text-center">
+                  KÍCH THƯỚC W x D x H (mm)
+                </th>
+                <th class="text-break text-center" style="width: 160px">
+                  Mô tả
+                </th>
+                <th class="text-break text-center">Hình minh họa</th>
+                <th class="text-break text-center">Đơn Giá (VNĐ)</th>
+                <th class="text-break text-center">Số lượng</th>
+                <th class="text-break text-center">Đơn vị</th>
+                <th class="text-break text-center">Thành tiền (VNĐ)</th>
+                <th class="text-break text-center">Ghi chú</th>
+                <th
+                  class="text-break text-center"
+                  data-html2canvas-ignore="true"
+                >
+                  Hành động
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of danhSachSanPhamCoSan; let i = index">
+                <td class="text-center">{{ i + 1 }}</td>
+                <td class="text-break text-center">{{ item.hangmuc }}</td>
+                <td class="text-break text-center">{{ item.size }}</td>
+                <td class="text-break">{{ item.mota }}</td>
+                <td>
+                  <img
+                    [src]="item.img"
+                    alt="Hình minh họa"
+                    style="max-width: 150px; max-height: 150px"
+                  />
+                </td>
+                <td class="text-break text-center">
+                  {{ item.dongia | number : "1.0-0" }}đ
+                </td>
+                <td class="text-break text-center">{{ item.soluong }}</td>
+                <td class="text-break text-center">{{ item.donvi }}</td>
+                <td class="text-break text-center">
+                  {{ item.thanhtien | number : "1.0-0" }}đ
+                </td>
+                <td class="text-break text-center">{{ item.ghichu }}</td>
+                <td
+                  class="d-flex justify-content-center"
+                  style="gap: 5px"
+                  data-html2canvas-ignore="true"
+                >
+                  <button
+                    class="btn btn-success btn-sm"
+                    (click)="addSanPhamCoSan(item)"
+                  >
+                    <i class="fa-solid fa-plus"></i>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
   </div>
   <!-- Tổng cộng -->
   <div
@@ -378,17 +485,26 @@
         </div>
 
         <div
-          class="d-flex justify-content-between align-items-center p-3 bg-success text-white rounded-bottom"
+          class="d-flex justify-content-between align-items-center flex-wrap p-2 bg-success text-white rounded-bottom"
         >
           <h5 class="mb-0 fw-bold text-uppercase">
             <i class="fa-solid fa-money-bill-1-wave me-2"></i>Thành tiền (I -
             II)
           </h5>
           <span class="fs-4 fw-bold text-warning"
-            >{{ tongThanhTien - tongThanhTien * (giamGia / 100) | number : "1.0-0" }} VNĐ</span
+            >{{
+              tongThanhTien -
+                tongThanhTien * (giamGia / 100) +
+                (tongThanhTien - tongThanhTien * (giamGia / 100)) * 0.1
+                | number : "1.0-0"
+            }}
+            VNĐ</span
           >
         </div>
       </div>
+      <span class="fst-italic text-danger" style="font-size: 12px">
+        * Giá trên đã bao gồm 10% VAT
+      </span>
     </div>
     <div class="col-md-2"></div>
     <div class="col-md-5 text-center">
@@ -413,7 +529,7 @@
           </h6>
 
           <div class="row text-secondary small">
-            <div class="col-md-6">
+            <div class="col-md-4">
               <ul class="list-unstyled">
                 <li class="mb-2">
                   <strong>1/ Chất liệu & Phụ kiện:</strong> Tất cả kích thước
@@ -435,8 +551,7 @@
                 </li>
               </ul>
             </div>
-
-            <div class="col-md-6">
+            <div class="col-md-4">
               <ul class="list-unstyled">
                 <li class="mb-2">
                   <strong>5/ Thời gian:</strong> Thiết kế và thi công lắp đặt
@@ -457,7 +572,12 @@
                 <li class="mb-2"><strong>8/ Bảo hành:</strong> 2 năm.</li>
               </ul>
             </div>
-
+            <div class="col-md-4 text-center">
+              <img
+                [src]="`https://qr.sepay.vn/img?bank=Eximbank&acc=0933426399&template=qronly&amount=${tongThanhTien - tongThanhTien * (giamGia / 100) + (tongThanhTien - tongThanhTien * (giamGia / 100)) * 0.1}&des=${soHopDong}`"
+                width="225px"
+              />
+            </div>
             <div class="col-12 mt-2 fst-italic text-danger">
               * Các hạng mục không có trong báo giá được coi là phát sinh và sẽ
               được thực hiện khi có xác nhận từ khách hàng.
@@ -466,11 +586,11 @@
         </div>
       </div>
 
-      <div class="row mt-5" style="page-break-inside: avoid">
+      <div class="row mt-2" style="page-break-inside: avoid">
         <div class="col-6 text-center">
           <h5 class="fw-bold text-uppercase mb-5">Đại diện khách hàng</h5>
 
-          <div style="height: 120px"></div>
+          <div style="height: 100px"></div>
 
           <div class="border-top w-50 mx-auto border-secondary pt-2">
             <small class="text-muted">(Ký và ghi rõ họ tên)</small>
@@ -490,11 +610,14 @@
 
           <div
             class="d-flex justify-content-center align-items-end"
-            style="height: 100px"
+            style="height: 95px"
           ></div>
-
-          <div class="fw-bold fs-5 text-uppercase mt-2">
-            Phan Thị Hoàng Diệu
+          <div class="d-flex justify-content-center align-items-center">
+            <input
+              type="text"
+              class="form-control input-kieu-giay-chuky w-70 text-center"
+              placeholder="Phan Thị Hoàng Diệu"
+            />
           </div>
         </div>
       </div>
