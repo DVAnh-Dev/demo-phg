@@ -19,6 +19,7 @@ export class SanphamComponent implements OnInit {
   public danhSachSanPhamCoSan: ISanPham[] = [];
   public sanPhamChiTiet: ISanPham | undefined;
   public tongThanhTien: number = 0;
+  public soluongThemmoi: number = 1;
   public giamGia: number = 50;
   public soHopDong: string = '';
   public ngayHienTai = new Date();
@@ -179,11 +180,19 @@ export class SanphamComponent implements OnInit {
 
   addSanPhamCoSan(data: ISanPham): void {
     this.isAddNew = true;
-    this.sanphamService.addSanPham(data).subscribe(() => {
+    const sanPhamMoi: ISanPham = { ...data, soluong: this.soluongThemmoi ,thanhtien: (data.dongia || 1) * this.soluongThemmoi};
+    this.sanphamService.addSanPham(sanPhamMoi).subscribe(() => {
       this.getData();
-        this.isAddNew = false;
-        this.isUpdate = false;
+      this.isAddNew = false;
+      this.isUpdate = false;
     });
+  }
+
+  onChangeSoluong(event: any): void {
+    const value = event.target.value;
+    this.sanPham.soluong = Number(value);
+    this.soluongThemmoi = Number(value);
+
   }
 
   deleteSanPham(id: string): void {
@@ -298,50 +307,100 @@ export class SanphamComponent implements OnInit {
       reader.onerror = (error) => reject(error);
     });
   }
-  public xuatPDF(): void {
-    const data = document.body;
 
+  /**
+   * Hàm thêm khoảng trắng để tránh cắt dòng xấu
+   */
+  addPageBreaks() {
+    // 1. Lấy phần tử bao quanh nội dung in
+    const element = document.getElementById('xuat-pdf');
+    // const rows = element.querySelectorAll('tr, .footer-block');
+    if (!element) return;
+
+    // 2. Lấy tất cả các thẻ TR trong bảng và các thẻ DIV quan trọng (như chữ ký, footer)
+    // Bạn có thể thêm class .no-cut vào các thẻ div chữ ký nếu muốn nó không bị cắt
+    const rows = element.querySelectorAll('tr, .card, .row, .footer-block');
+
+    // 3. Tính chiều cao một trang A4 theo Pixel (trên màn hình hiện tại)
+    // A4 width = 210mm, height = 297mm. Tỷ lệ = 1.414
+    const contentWidth = element.offsetWidth;
+    const pageHeight = contentWidth * 1.414; // Chiều cao A4 tính theo px tại thời điểm này
+
+    let accumulatedHeight = 0; // Tổng chiều cao đã duyệt qua
+    let pageCount = 1;
+
+    // 4. Duyệt qua từng phần tử để kiểm tra
+    rows.forEach((row: any) => {
+      // Reset margin cũ (nếu có) để tính toán lại từ đầu
+      row.style.marginTop = '0px';
+
+      const rowHeight = row.offsetHeight;
+      const rowTop = row.offsetTop;
+
+      // Tính vị trí kết thúc của dòng hiện tại
+      const rowBottom = rowTop + rowHeight;
+
+      // Vị trí "biên giới" của trang giấy hiện tại
+      const pageBoundary = pageCount * pageHeight;
+
+      // 5. KIỂM TRA QUAN TRỌNG:
+      // Nếu dòng hiện tại bắt đầu trước biên giới, nhưng kết thúc sau biên giới
+      // => Tức là nó đang nằm đè lên vạch cắt
+      if (rowTop < pageBoundary && rowBottom > pageBoundary) {
+        // Tính khoảng cách cần đẩy xuống trang sau
+        const marginNeeded = pageBoundary - rowTop;
+
+        // Thêm margin-top để đẩy dòng này sang trang mới
+        // Cộng thêm 20px để có khoảng hở đẹp ở đầu trang
+        row.style.marginTop = marginNeeded + 20 + 'px';
+
+        // Tăng số trang lên vì nội dung đã bị đẩy xuống
+        pageCount++;
+      }
+    });
+  }
+
+  /**
+   * Hàm dọn dẹp sau khi in (trả lại giao diện cũ)
+   */
+  removePageBreaks() {
+    const element = document.getElementById('xuat-pdf');
+    if (!element) return;
+    const rows = element.querySelectorAll('tr, .card, .row');
+    rows.forEach((row: any) => {
+      row.style.marginTop = '0px';
+    });
+  }
+
+  public xuatPDF(): void {
+    const data = document.getElementById('xuat-pdf');
+    this.addPageBreaks();
     if (data) {
       // 1. GIẢM SCALE: Thay vì 2, hãy dùng 1.5 (vừa đủ nét) hoặc 1 (nhẹ nhất)
       // Thêm backgroundColor: '#ffffff' để khi chuyển sang JPEG nền không bị đen
-      html2canvas(data, {
-        scale: 1.5,
-        useCORS: true,
-        logging: false,
-        allowTaint: true,
-        backgroundColor: '#ffffff',
-      }).then((canvas) => {
-        const imgWidth = 210;
-        const pageHeight = 297;
-        const imgHeight = (canvas.height * imgWidth) / canvas.width;
-        let heightLeft = imgHeight;
+      setTimeout(() => {
+        html2canvas(data, {
+          scale: 1.5,
+          useCORS: true,
+          logging: false,
+          allowTaint: true,
+          backgroundColor: '#ffffff',
+        }).then((canvas) => {
+          const imgWidth = 210;
+          const pageHeight = 297;
+          const imgHeight = (canvas.height * imgWidth) / canvas.width;
+          let heightLeft = imgHeight;
 
-        const pdf = new jsPDF('p', 'mm', 'a4');
-        let position = 0;
+          const pdf = new jsPDF('p', 'mm', 'a4');
+          let position = 0;
 
-        // 2. CHUYỂN SANG JPEG VÀ NÉN:
-        // 'image/jpeg': Định dạng nén
-        // 0.6: Chất lượng ảnh (từ 0 đến 1). 0.6 là mức cân bằng tốt giữa dung lượng và độ nét.
-        const imgData = canvas.toDataURL('image/jpeg', 0.5);
+          // 2. CHUYỂN SANG JPEG VÀ NÉN:
+          // 'image/jpeg': Định dạng nén
+          // 0.6: Chất lượng ảnh (từ 0 đến 1). 0.6 là mức cân bằng tốt giữa dung lượng và độ nét.
+          const imgData = canvas.toDataURL('image/jpeg', 0.5);
 
-        // In trang đầu tiên
-        // Tham số 'FAST' giúp jsPDF xử lý nhanh hơn
-        pdf.addImage(
-          imgData,
-          'JPEG',
-          0,
-          position,
-          imgWidth,
-          imgHeight,
-          undefined,
-          'FAST'
-        );
-        heightLeft -= pageHeight;
-
-        // Vòng lặp in các trang tiếp theo
-        while (heightLeft >= 0) {
-          position = heightLeft - imgHeight;
-          pdf.addPage();
+          // In trang đầu tiên
+          // Tham số 'FAST' giúp jsPDF xử lý nhanh hơn
           pdf.addImage(
             imgData,
             'JPEG',
@@ -353,10 +412,28 @@ export class SanphamComponent implements OnInit {
             'FAST'
           );
           heightLeft -= pageHeight;
-        }
 
-        pdf.save('Hop-dong-bao-gia.pdf');
-      });
+          // Vòng lặp in các trang tiếp theo
+          while (heightLeft >= 0) {
+            position = heightLeft - imgHeight;
+            pdf.addPage();
+            pdf.addImage(
+              imgData,
+              'JPEG',
+              0,
+              position,
+              imgWidth,
+              imgHeight,
+              undefined,
+              'FAST'
+            );
+            heightLeft -= pageHeight;
+          }
+
+          pdf.save('Hop-dong-bao-gia.pdf');
+          this.removePageBreaks();
+        });
+      }, 100);
     }
   }
 }

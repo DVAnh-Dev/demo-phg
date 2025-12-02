@@ -1,9 +1,9 @@
-<div class="container-fluid" id="xuat-pdf">
+<div class="container-fluid">
   <div class="row">
     <div class="col-12 col-sm-12 col-md-12 col-lg-12">
       <div class="container">
         <div class="row">
-          <div class="col-12 d-flex justify-content-center">
+          <div class="col-12 d-flex justify-content-center" id="xuat-pdf">
             <app-sanpham></app-sanpham>
           </div>
         </div>
@@ -12,3 +12,9 @@
   </div>
 </div>
 <router-outlet></router-outlet>
+<div *ngIf="loadingService.isLoading | async" class="loading-overlay">
+  <div class="spinner-border text-light" style="width: 3rem; height: 3rem;" role="status">
+    <span class="visually-hidden">Loading...</span>
+  </div>
+  <div class="text-white mt-2 fw-bold">Đang xử lý...</div>
+</div>

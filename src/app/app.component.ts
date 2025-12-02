@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { SanphamComponent } from './sanpham/sanpham.component';
 import { CommonModule } from '@angular/common'; // Cần để dùng *ngFor
+import { LoadingService } from './core/interceptors/loading.service';
 // import { AppModule } from './app.module';
 
 @Component({
@@ -16,4 +17,5 @@ export class AppComponent implements OnInit {
     ngOnInit(): void {
     // this.getData();
   }
+  constructor(public loadingService: LoadingService) {}
 }
